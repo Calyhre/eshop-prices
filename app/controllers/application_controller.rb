@@ -32,8 +32,7 @@ class ApplicationController < ActionController::Base
   end
 
   def rates
-    exchange_rates  = ExchangeRate.all
-    currencies      = exchange_rates.pluck(:from).uniq.sort
+    currencies = Price.pluck(:currency).uniq.sort
 
     csv = CSV.generate(headers: true) do |rows|
       rows << [''].concat(currencies)
@@ -41,8 +40,7 @@ class ApplicationController < ActionController::Base
       currencies.each do |from|
         row = [from]
         currencies.each do |to|
-          exchange_rate = exchange_rates.find_by(from: from, to: to)
-          row << (exchange_rate.present? ? exchange_rate.rate : 1)
+          row << Money.default_bank.get_rate(from, to)
         end
         rows << row
       end
@@ -55,7 +53,7 @@ class ApplicationController < ActionController::Base
 
   def glossary
     countries   = Price.pluck(:country).uniq.sort
-    currencies  = ExchangeRate.pluck(:from).uniq.sort
+    currencies  = Price.pluck(:currency).uniq.sort
 
     csv = CSV.generate(headers: true) do |rows|
       rows << ['Countries']
