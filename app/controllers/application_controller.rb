@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
     currency  = Price.pluck(:currency).include?(params[:currency]) ? params[:currency] : nil
 
     csv = CSV.generate(headers: true) do |rows|
-      rows << %w(title).concat(countries)
+      rows << %w(Title).concat(countries)
       games.each do |code, games|
         game    = games.first
         prices  = games.flat_map(&:prices)
@@ -19,6 +19,24 @@ class ApplicationController < ActionController::Base
         end
         # csv << attributes.map{ |attr| user.send(attr) }
         rows << row
+      end
+    end
+
+    send_data csv, type: 'text/csv; charset=utf-8; header=present'
+  end
+
+  def best_deals
+    games = Game.all.includes(:prices).sort_by(&:title).group_by(&:parsed_game_code)
+    currencies = Price.pluck(:currency).uniq.sort
+
+    csv = CSV.generate(headers: true) do |rows|
+      rows << ['Title', 'Country'].concat(currencies)
+
+      games.each do |code, games|
+        game    = games.first
+        lowest = games.flat_map(&:prices).min_by { |price| price.value.exchange_to('USD') }
+        rates = currencies.map { |c| lowest.value.exchange_to(c) }
+        rows << [game.title, lowest.country].concat(rates)
       end
     end
 
