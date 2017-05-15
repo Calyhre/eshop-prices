@@ -52,4 +52,33 @@ class ApplicationController < ActionController::Base
       format.csv { send_data csv }
     end
   end
+
+  def glossary
+    countries   = Price.pluck(:country).uniq.sort
+    currencies  = ExchangeRate.pluck(:from).uniq.sort
+
+    csv = CSV.generate(headers: true) do |rows|
+      rows << ['Countries']
+      rows << ['Country code', 'Country name', 'Currency code', 'Currency name']
+
+      countries.each do |code|
+        country = ISO3166::Country[code]
+        rows << [code, country.name, country.currency.iso_code, country.currency.name]
+      end
+
+      rows << []
+
+      rows << ['Currencies']
+      rows << ['Currency code', 'Currency name']
+      currencies.each do |code|
+        currency = ISO3166::Country.find_country_by_currency(code).currency
+        rows << [code, currency.name]
+      end
+
+    end
+
+    respond_to do |format|
+      format.csv { send_data csv }
+    end
+  end
 end

@@ -3,4 +3,5 @@ Rails.application.routes.draw do
 
   get :prices, to: 'application#prices'
   get :rates, to: 'application#rates'
+  get :glossary, to: 'application#glossary'
 end
