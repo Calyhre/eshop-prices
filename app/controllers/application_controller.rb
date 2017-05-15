@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
     request.format = :csv
   end
 
-  def index
+  def prices
     games     = Game.all.includes(:prices).sort_by(&:title).group_by(&:parsed_game_code)
     countries = Price.pluck(:country).uniq.sort
     currency  = Price.pluck(:currency).include?(params[:currency]) ? params[:currency] : nil
@@ -22,6 +22,28 @@ class ApplicationController < ActionController::Base
           row << (price ? (currency ? price.value.exchange_to(currency) : price.value) : 'NA')
         end
         # csv << attributes.map{ |attr| user.send(attr) }
+        rows << row
+      end
+    end
+
+    respond_to do |format|
+      format.csv { send_data csv }
+    end
+  end
+
+  def rates
+    exchange_rates  = ExchangeRate.all
+    currencies      = exchange_rates.pluck(:from).uniq.sort
+
+    csv = CSV.generate(headers: true) do |rows|
+      rows << [''].concat(currencies)
+
+      currencies.each do |from|
+        row = [from]
+        currencies.each do |to|
+          exchange_rate = exchange_rates.find_by(from: from, to: to)
+          row << (exchange_rate.present? ? exchange_rate.rate : 1)
+        end
         rows << row
       end
     end
