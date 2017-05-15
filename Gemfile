@@ -5,6 +5,7 @@ gem 'puma', '~> 3.7'
 
 gem 'pg', '~> 0.18'
 gem 'rails', '~> 5.1.1'
+gem 'redis', '~>3.2'
 
 gem 'bugsnag'
 gem 'countries'

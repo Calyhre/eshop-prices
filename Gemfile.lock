@@ -139,6 +139,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
+    redis (3.3.3)
     ruby_dep (1.5.0)
     sixarm_ruby_unaccent (1.1.1)
     slop (3.6.0)
@@ -178,6 +179,7 @@ DEPENDENCIES
   pg (~> 0.18)
   puma (~> 3.7)
   rails (~> 5.1.1)
+  redis (~> 3.2)
   spring
   spring-watcher-listen (~> 2.0.0)
 
