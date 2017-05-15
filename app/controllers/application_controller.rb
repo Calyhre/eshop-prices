@@ -1,10 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  before_action do
-    request.format = :csv
-  end
-
   def prices
     games     = Game.all.includes(:prices).sort_by(&:title).group_by(&:parsed_game_code)
     countries = Price.pluck(:country).uniq.sort
@@ -26,9 +22,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    respond_to do |format|
-      format.csv { send_data csv }
-    end
+    send_data csv, type: 'text/csv; charset=utf-8; header=present'
   end
 
   def rates
@@ -46,9 +40,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    respond_to do |format|
-      format.csv { send_data csv }
-    end
+    send_data csv, type: 'text/csv; charset=utf-8; header=present'
   end
 
   def glossary
@@ -75,8 +67,6 @@ class ApplicationController < ActionController::Base
 
     end
 
-    respond_to do |format|
-      format.csv { send_data csv }
-    end
+    send_data csv, type: 'text/csv; charset=utf-8; header=present'
   end
 end
