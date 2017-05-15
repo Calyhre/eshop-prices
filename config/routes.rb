@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get :best_deals, to: 'application#best_deals'
   get :rates, to: 'application#rates'
   get :glossary, to: 'application#glossary'
+  get :about, to: 'application#about'
 end
