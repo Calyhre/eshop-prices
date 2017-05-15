@@ -6,6 +6,7 @@ gem 'puma', '~> 3.7'
 gem 'pg', '~> 0.18'
 gem 'rails', '~> 5.1.1'
 
+gem 'bugsnag'
 gem 'countries'
 gem 'httparty'
 gem 'money-rails'
