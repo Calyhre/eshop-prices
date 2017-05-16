@@ -70,12 +70,13 @@ module Eshop
 
     def self.list_americas
       url = 'https://www.nintendo.com/json/content/get/filter/game'
+      disable_rails_query_string_format
       default_params = {
         limit: 40,
         system: 'switch',
         sort: 'title',
         direction: 'asc',
-        availability: 'now',
+        availability: %w(now prepurchase),
         shop: 'ncom',
       }.freeze
 
@@ -95,6 +96,7 @@ module Eshop
       #   offset += limit
       # end
       return games.map do |game|
+        next unless game[:game_code] && game[:nsuid]
         {
           region: 'americas',
           game_code: game[:game_code],
@@ -104,7 +106,7 @@ module Eshop
           nsuid: game[:nsuid],
           cover_url: game[:front_box_art],
         }
-      end
+      end.compact
     end
   end
 
