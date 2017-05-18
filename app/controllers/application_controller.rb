@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
         lowest = games.flat_map(&:prices).min_by { |price| price.value.exchange_to('USD') }
         next if !lowest.present?
         rates = currencies.map { |c| lowest.value.exchange_to(c) }
-        rows << [game.title, lowest.country].concat(rates)
+        rows << [game.title, ISO3166::Country[lowest.country].translation('en')].concat(rates)
       end
     end
 
@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
 
       countries.each do |code|
         country = ISO3166::Country[code]
-        rows << [code, country.name, country.currency.iso_code, country.currency.name]
+        rows << [code, country.translation('en'), country.currency.iso_code, country.currency.name]
       end
 
       rows << []
