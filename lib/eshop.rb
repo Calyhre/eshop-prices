@@ -135,7 +135,7 @@ module Eshop
           country: country,
           status: price[:sales_status],
           currency: price.dig(:regular_price, :currency),
-          value_in_cents: (price.dig(:regular_price, :raw_value).to_f * 100).round,
+          value_in_cents: Money.from_amount(price.dig(:regular_price, :raw_value).to_f, price.dig(:regular_price, :currency)).cents,
         }
       end.compact
     end
