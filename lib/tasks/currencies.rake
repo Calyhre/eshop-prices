@@ -1,6 +1,6 @@
 require 'httparty'
 
-API_URL = 'http://rate-exchange-1.appspot.com/currency'.freeze
+API_URL = 'http://api.fixer.io/latest'.freeze
 
 namespace :currencies do
   desc 'Get all currencies exchange rates'
@@ -9,11 +9,12 @@ namespace :currencies do
 
     currencies.each do |from|
       puts "Retieving #{currencies.count} rates for #{from} currency..."
-      currencies.each do |to|
-        response = HTTParty.get(API_URL, query: { from: from, to: to})
-        rate = JSON.parse(response.body, symbolize_names: true)[:rate]
+      response = HTTParty.get(API_URL, query: { base: from, symbols: currencies.join(',')})
+      rates = JSON.parse(response.body, symbolize_names: true)[:rates]
+      rates.each do |to, rate|
         Money.add_rate(from, to, rate)
       end
+      Money.add_rate(from, from, 1.0)
     end
   end
 end
