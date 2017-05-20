@@ -17,6 +17,10 @@ class Game < ApplicationRecord
 
   has_many :prices
 
+  scope :order_by_title, -> {
+    order('LOWER(title COLLATE "C")')
+  }
+
   scope :order_by_region, -> {
     order_by = ['case']
     REGIONS.each_with_index do |region, index|
@@ -26,6 +30,6 @@ class Game < ApplicationRecord
     order(order_by.join(' '))
   }
 
-  scope :by_game_code,  -> { order_by_region.order('LOWER(title)').group_by(&:game_code) }
-  scope :by_region,     -> { order_by_region.order('LOWER(title)').group_by(&:region) }
+  scope :by_game_code,  -> { order_by_title.order_by_region.group_by(&:game_code) }
+  scope :by_region,     -> { order_by_title.order_by_region.group_by(&:region) }
 end
