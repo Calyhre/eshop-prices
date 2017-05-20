@@ -17,6 +17,6 @@ class Game < ApplicationRecord
 
   has_many :prices
 
-  scope :by_title, -> { order('LOWER(title)', :region) }
-  scope :by_game_code, -> { by_title.group_by(&:game_code) }
+  scope :by_game_code,  -> { order('LOWER(title)', :region).group_by(&:game_code) }
+  scope :by_region,     -> { order(:region, 'LOWER(title)').group_by(&:region) }
 end

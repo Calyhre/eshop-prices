@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/grouping'
+require 'active_support/core_ext/hash/slice'
 require 'httparty'
 require 'countries'
 
@@ -40,7 +42,8 @@ module Eshop
     def self.list_europe
       url = 'http://search.nintendo-europe.com/en/select'
       default_params = {
-        fq: 'type:GAME AND ((system_type:"nintendoswitch_gamecard" OR system_type:"nintendoswitch_downloadsoftware") AND product_code_txt:[* TO *] AND nsuid_txt:[* TO *]) AND *:*',
+        fl: 'product_code_txt,title,date_from,nsuid_txt,image_url',
+        fq: 'type:GAME AND (system_type:"nintendoswitch_gamecard" OR system_type:"nintendoswitch_downloadsoftware" OR system_type:"nintendoswitch_digitaldistribution") AND product_code_txt:*',
         q: '*',
         rows: 9999,
         sort: 'sorting_title asc',
@@ -54,8 +57,8 @@ module Eshop
       return games.map do |game|
         {
           region: 'europe',
-          raw_game_code: game.dig(:product_code_txt, 0),
           game_code: game.dig(:product_code_txt, 0).match(/\AHAC\w?(\w{4})\w\Z/)[1],
+          raw_game_code: game.dig(:product_code_txt, 0),
           title: game[:title],
           release_date: Date.parse(game[:date_from]),
           nsuid: game.dig(:nsuid_txt, 0),
@@ -69,14 +72,12 @@ module Eshop
     end
 
     def self.list_americas
-      url = 'https://www.nintendo.com/json/content/get/filter/game'
-      disable_rails_query_string_format
+      url = 'http://www.nintendo.com/json/content/get/filter/game'
       default_params = {
         limit: 40,
         system: 'switch',
         sort: 'title',
         direction: 'asc',
-        availability: %w(now prepurchase),
         shop: 'ncom',
       }.freeze
 
@@ -96,11 +97,11 @@ module Eshop
       #   offset += limit
       # end
       return games.map do |game|
-        next unless game[:game_code] && game[:nsuid]
+        next if (game[:game_code] =~ /\AHAC\w?(\w{4})\w\Z/).nil?
         {
           region: 'americas',
-          raw_game_code: game[:game_code],
           game_code: game[:game_code].match(/\AHAC\w?(\w{4})\w\Z/)[1],
+          raw_game_code: game[:game_code],
           title: game[:title],
           release_date: Date.parse(game[:release_date]),
           nsuid: game[:nsuid],
@@ -119,17 +120,10 @@ module Eshop
     }.freeze
 
     def self.list(country: 'US', ids: [], limit: 50)
-      mutable_ids = ids.dup
-      prices = []
-
-      loop do
-        break if mutable_ids.empty?
-        response = get(URL, query: DEFAULT_PARAMS.merge(country: country, ids: mutable_ids.shift(limit).join(',')))
-        prices = prices.concat(JSON.parse(response.body, symbolize_names: true)[:prices])
-      end
-
-      return prices.map do |price|
-        next unless price[:regular_price]
+      ids.in_groups_of(limit).flat_map do |ids_to_fetch|
+        response = get(URL, query: DEFAULT_PARAMS.merge(country: country, ids: ids_to_fetch.join(',')))
+        JSON.parse(response.body, symbolize_names: true)[:prices].select { |p| p.include? :regular_price }
+      end.map do |price|
         {
           nsuid: price[:title_id],
           country: country,
@@ -137,7 +131,7 @@ module Eshop
           currency: price.dig(:regular_price, :currency),
           value_in_cents: Money.from_amount(price.dig(:regular_price, :raw_value).to_f, price.dig(:regular_price, :currency)).cents,
         }
-      end.compact
+      end
     end
   end
 end
