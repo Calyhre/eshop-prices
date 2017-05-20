@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515170820) do
+ActiveRecord::Schema.define(version: 20170520131614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
+    t.string "raw_game_code"
     t.string "game_code"
-    t.string "parsed_game_code"
     t.string "nsuid"
     t.string "region"
     t.string "title"
@@ -25,9 +25,9 @@ ActiveRecord::Schema.define(version: 20170515170820) do
     t.string "cover_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["game_code", "nsuid"], name: "index_games_on_game_code_and_nsuid", unique: true
+    t.index ["game_code", "region"], name: "index_games_on_game_code_and_region", unique: true
+    t.index ["game_code"], name: "index_games_on_game_code"
     t.index ["nsuid"], name: "index_games_on_nsuid"
-    t.index ["parsed_game_code"], name: "index_games_on_parsed_game_code"
   end
 
   create_table "prices", force: :cascade do |t|

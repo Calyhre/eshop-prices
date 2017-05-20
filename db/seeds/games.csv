@@ -1,4 +1,4 @@
-title,game_code,parsed_game_code,nsuid,region,release_date,cover_url
+title,raw_game_code,game_code,nsuid,region,release_date,cover_url
 1-2-Switch（ワンツースイッチ）,HACAACCA,AACC,70010000000027,asia,2017-03-03,https://www.nintendo.co.jp/software/switch/img/launch_panel_12switch.jpg
 Minecraft: Nintendo Switch Edition,HACPAB3NA,AB3N,70010000000412,asia,2017-05-12,https://www.nintendo.co.jp/software/switch/img/HACPAB3NA.jpg
 THUMPER リズム・バイオレンスゲーム,HACACGNA,ACGN,70010000000321,asia,2017-05-18,https://www.nintendo.co.jp/software/switch/img/HACACGNA.jpg

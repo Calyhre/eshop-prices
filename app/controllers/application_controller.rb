@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def prices
-    games     = Game.all.includes(:prices).sort_by(&:title).group_by(&:parsed_game_code)
+    games     = Game.includes(:prices).by_game_code
     countries = Price.pluck(:country).uniq.sort
     currency  = Price.pluck(:currency).include?(params[:currency]) ? params[:currency] : nil
 
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
 
   def best_deals
-    games = Game.all.includes(:prices).sort_by(&:title).group_by(&:parsed_game_code)
+    games = Game.includes(:prices).by_game_code
     currencies = Price.pluck(:currency).uniq.sort
 
     csv = CSV.generate(headers: true) do |rows|

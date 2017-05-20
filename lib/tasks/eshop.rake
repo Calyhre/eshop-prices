@@ -4,7 +4,7 @@ namespace :eshop do
   desc 'Get all games from eShop API'
   task retrieve_games: :environment do
     Eshop::Games.list.map do |raw_game|
-      Game.find_or_create_by(nsuid: raw_game[:nsuid], game_code: raw_game[:game_code]).update_attributes!(raw_game)
+      Game.find_or_create_by(region: raw_game[:region], game_code: raw_game[:game_code]).update_attributes!(raw_game)
     end
   end
 

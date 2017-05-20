@@ -54,8 +54,8 @@ module Eshop
       return games.map do |game|
         {
           region: 'europe',
-          game_code: game.dig(:product_code_txt, 0),
-          parsed_game_code: game.dig(:product_code_txt, 0).match(/\AHAC.(.{4}).\Z/)[1],
+          raw_game_code: game.dig(:product_code_txt, 0),
+          game_code: game.dig(:product_code_txt, 0).match(/\AHAC\w?(\w{4})\w\Z/)[1],
           title: game[:title],
           release_date: Date.parse(game[:date_from]),
           nsuid: game.dig(:nsuid_txt, 0),
@@ -99,8 +99,8 @@ module Eshop
         next unless game[:game_code] && game[:nsuid]
         {
           region: 'americas',
-          game_code: game[:game_code],
-          parsed_game_code: game[:game_code].match(/\AHAC.(.{4}).\Z/)[1],
+          raw_game_code: game[:game_code],
+          game_code: game[:game_code].match(/\AHAC\w?(\w{4})\w\Z/)[1],
           title: game[:title],
           release_date: Date.parse(game[:release_date]),
           nsuid: game[:nsuid],
