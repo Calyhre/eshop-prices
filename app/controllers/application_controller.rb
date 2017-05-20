@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   def prices
     games     = Game.includes(:prices).by_game_code
-    countries = Price.pluck(:country).uniq.sort
+    countries = Price.distinct.pluck(:country).sort
     currency  = Price.pluck(:currency).include?(params[:currency]) ? params[:currency] : nil
 
     csv = CSV.generate(headers: true) do |rows|
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
 
   def best_deals
     games = Game.includes(:prices).by_game_code
-    currencies = Price.pluck(:currency).uniq.sort
+    currencies = Price.distinct.pluck(:currency).sort
 
     csv = CSV.generate(headers: true) do |rows|
       rows << ['Title', 'Country'].concat(currencies)
@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def rates
-    currencies = Price.pluck(:currency).uniq.sort
+    currencies = Price.distinct.pluck(:currency).sort
 
     csv = CSV.generate(headers: true) do |rows|
       rows << [''].concat(currencies)
@@ -63,8 +63,8 @@ class ApplicationController < ActionController::Base
   end
 
   def glossary
-    countries   = Price.pluck(:country).uniq.sort
-    currencies  = Price.pluck(:currency).uniq.sort
+    countries   = Price.distinct.pluck(:country).sort
+    currencies  = Price.distinct.pluck(:currency).sort
 
     csv = CSV.generate(headers: true) do |rows|
       rows << ['Countries']
