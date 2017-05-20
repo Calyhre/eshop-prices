@@ -1,5 +1,5 @@
 class Game < ApplicationRecord
-  REGIONS = %w(americas asia europe).freeze
+  REGIONS = %w(americas europe asia).freeze
   GAME_CODE_FORMAT = /\A[0-9A-Z]{4}\z/.freeze
   NSUID_CODE_FORMAT = /\A7001000000[0-9]{4}\z/.freeze
 
@@ -17,6 +17,15 @@ class Game < ApplicationRecord
 
   has_many :prices
 
-  scope :by_game_code,  -> { order('LOWER(title)', :region).group_by(&:game_code) }
-  scope :by_region,     -> { order(:region, 'LOWER(title)').group_by(&:region) }
+  scope :order_by_region, -> {
+    order_by = ['case']
+    REGIONS.each_with_index do |region, index|
+      order_by << "WHEN games.region='#{region}' THEN #{index}"
+    end
+    order_by << 'end'
+    order(order_by.join(' '))
+  }
+
+  scope :by_game_code,  -> { order('LOWER(title)').order_by_region.group_by(&:game_code) }
+  scope :by_region,     -> { order('LOWER(title)').order_by_region.group_by(&:region) }
 end
