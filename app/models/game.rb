@@ -26,6 +26,6 @@ class Game < ApplicationRecord
     order(order_by.join(' '))
   }
 
-  scope :by_game_code,  -> { order('LOWER(title)').order_by_region.group_by(&:game_code) }
-  scope :by_region,     -> { order('LOWER(title)').order_by_region.group_by(&:region) }
+  scope :by_game_code,  -> { order_by_region.order('LOWER(title)').group_by(&:game_code) }
+  scope :by_region,     -> { order_by_region.order('LOWER(title)').group_by(&:region) }
 end
