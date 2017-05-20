@@ -17,7 +17,7 @@ namespace :eshop do
         print "    #{ISO3166::Country[country]}"
         Eshop::Prices.list(country: country, ids: ids).map do |price|
           price[:game] = Game.find_by(region: region, nsuid: price[:nsuid])
-          Price.find_or_create_by!(nsuid: price[:nsuid], country: country).update_attributes!(price)
+          Price.find_or_initialize_by(nsuid: price[:nsuid], country: country).update_attributes!(price)
         end
         print "  OK\n"
       end
