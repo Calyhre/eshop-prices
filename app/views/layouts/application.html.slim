@@ -1,0 +1,35 @@
+doctype 5
+html
+  head
+    meta name="viewport" content="width=device-width,initial-scale=1"
+    title Nintendo Switch - Full game list with prices
+
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"
+
+    script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"
+    script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"
+    script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"
+
+    css:
+      .text-overflow {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+  body
+    nav.navbar.navbar-toggleable-sm.navbar-light.bg-faded.sticky-top style="width: 100%"
+      button.navbar-toggler.navbar-toggler-right type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+        span.navbar-toggler-icon
+      = link_to '#', class: 'navbar-brand' do
+        svg width="30" height="30" viewBox="0 0 253 325" xmlns="http://www.w3.org/2000/svg"
+          path d="M133.913 11.52c9.36-3.87 18.72-7.71 28.11-11.52-3.34 24.9-6.56 49.83-10.02 74.72-6.14-21.03-12.11-42.12-18.09-63.2zm63.97-8.92c8.99 4.63 17.99 9.23 26.89 14.02-17.26 22.09-34.21 44.42-51.6 66.41 8.09-26.85 16.53-53.6 24.71-80.43zm-7.83 96.01c18.36-17.2 36.83-34.29 55.26-51.41 2.27 9.9 4.69 19.78 6.83 29.71-20.74 7.12-41.33 14.65-62.09 21.7zM78.573 89c20.21-5.8 42.2-6.52 62.36-.08 17.76 5.55 33.58 16.35 46.39 29.72 12.83 13.52 22.89 29.56 30.03 46.74.87 2.03-.66 4.11-2.49 4.88-50.17 25.96-100.31 51.98-150.48 77.93 9.92 15.62 25.93 27.5 44.02 31.71 19.83 4.57 41.09-1.13 57.43-12.84 18.05-12.86 28.7-34.15 31.48-55.83.02-3 3.79-4.66 6.13-2.85 9.81 5.92 19.56 11.94 29.33 17.94 1.75.93 2.86 2.9 2.1 4.88-7.59 30.1-24.64 58.78-50.77 76.25-9.41 6.31-19.85 11.1-30.76 14.12-36.35 8.12-76.69-.3-105.3-24.61-15.06-12.65-26.94-28.8-35.67-46.35-3.59-6.75-5.74-14.12-7.77-21.44-6.44-24.08-6.52-50.29 2.3-73.79 11.66-31.72 38.93-57.53 71.67-66.38zm17.36 36.91c-19.29 4.32-36.85 16.71-46.2 34.28-8.59 15.75-11.85 35.75-3.82 52.39 37.48-20.14 74.88-40.43 112.34-60.62-4.59-7.85-10.93-14.74-18.71-19.5-12.84-8.07-28.97-10.05-43.61-6.55z" fill="#D8D8D8" fill-rule="evenodd"
+
+      #navbarSupportedContent.navbar-collapse.collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item class=(@current_page == 'games' ? 'active' : nil)
+            = link_to 'Game list', '#', class: 'nav-link'
+          li.nav-item
+            = link_to 'All prices', '#', class: 'nav-link disabled'
+
+    = yield

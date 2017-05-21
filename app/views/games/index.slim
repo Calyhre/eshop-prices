@@ -1,0 +1,23 @@
+table.table.table-responsive
+  thead.thead-default
+    tr
+      th Cover
+      th Code
+      th Region
+      th Title
+      th eShop ID (nsuid)
+      th Release date
+  tbody.games
+    - @games.each do |region, games|
+      - cover = games.map(&:cover_url).compact.first
+      - games.each_with_index do |game, index|
+        tr.game
+          - if index.zero?
+            td.game--cover-url rowspan=games.count
+              = cover ? image_tag(cover, style: 'max-width:120px;max-height:120px;', class: 'rounded mx-auto d-block', title: 'wat') : nil
+            td.game--code rowspan=games.count = game.game_code
+          td.game--region = game.region
+          td.game--title.text-overflow = game.title
+          td.game--nsuid = game.nsuid || 'NA'
+          td.game--release-date
+            time.text-overflow datetime=game.release_date.iso8601 = game.release_date.strftime("%b #{game.release_date.day.ordinalize}, %Y")

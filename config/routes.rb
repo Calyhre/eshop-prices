@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   get :rates, to: 'application#rates'
   get :glossary, to: 'application#glossary'
   get :about, to: 'application#about'
+
+  resources :games, only: :index
 end

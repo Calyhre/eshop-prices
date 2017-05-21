@@ -42,7 +42,7 @@ module Eshop
     def self.list_europe
       url = 'http://search.nintendo-europe.com/en/select'
       default_params = {
-        fl: 'product_code_txt,title,date_from,nsuid_txt,image_url',
+        fl: 'product_code_txt,title,date_from,nsuid_txt,image_url_sq_s',
         fq: 'type:GAME AND (system_type:"nintendoswitch_gamecard" OR system_type:"nintendoswitch_downloadsoftware" OR system_type:"nintendoswitch_digitaldistribution") AND product_code_txt:*',
         q: '*',
         rows: 9999,
@@ -62,7 +62,7 @@ module Eshop
           title: game[:title],
           release_date: Date.parse(game[:date_from]),
           nsuid: game.dig(:nsuid_txt, 0),
-          cover_url: game[:image_url],
+          cover_url: game[:image_url_sq_s],
         }
       end
     end

@@ -11,6 +11,7 @@ gem 'bugsnag'
 gem 'countries'
 gem 'httparty'
 gem 'money-rails'
+gem 'slim-rails'
 # gem 'sass-rails', '~> 5.0'
 
 group :development, :test do

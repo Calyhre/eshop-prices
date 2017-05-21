@@ -1,5 +1,5 @@
 class Game < ApplicationRecord
-  REGIONS = %w(americas europe asia).freeze
+  REGIONS = %w(europe americas asia).freeze
   GAME_CODE_FORMAT = /\A[0-9A-Z]{4}\z/.freeze
   NSUID_CODE_FORMAT = /\A7001000000[0-9]{4}\z/.freeze
 
@@ -30,6 +30,6 @@ class Game < ApplicationRecord
     order(order_by.join(' '))
   }
 
-  scope :by_game_code,  -> { order_by_title.order_by_region.group_by(&:game_code) }
+  scope :by_game_code,  -> { order_by_title.group_by(&:game_code).each { |_,games| games.sort_by! { |game| REGIONS.index(game.region) } } }
   scope :by_region,     -> { order_by_title.order_by_region.group_by(&:region) }
 end
