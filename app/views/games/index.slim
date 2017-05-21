@@ -4,7 +4,7 @@ table.table.table-responsive
       th Cover
       th Code
       th Region
-      th Title
+      th style="width:100%;min-width:200px" Title
       th eShop ID (nsuid)
       th Release date
   tbody.games
@@ -17,7 +17,7 @@ table.table.table-responsive
               = cover ? image_tag(cover, style: 'max-width:120px;max-height:120px;', class: 'rounded mx-auto d-block', title: 'wat') : nil
             td.game--code rowspan=games.count = game.game_code
           td.game--region = game.region
-          td.game--title.text-overflow = game.title
+          td.game--title.text-overflow  style="width:100%;max-width:0" = game.title
           td.game--nsuid = game.nsuid || 'NA'
           td.game--release-date
             time.text-overflow datetime=game.release_date.iso8601 = game.release_date.strftime("%b #{game.release_date.day.ordinalize}, %Y")
