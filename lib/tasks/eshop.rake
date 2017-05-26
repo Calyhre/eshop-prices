@@ -4,7 +4,8 @@ namespace :eshop do
   desc 'Get all games from eShop API'
   task retrieve_games: :environment do
     Eshop::Games.list.map do |raw_game|
-      Game.find_or_create_by!(region: raw_game[:region], game_code: raw_game[:game_code]).update_attributes!(raw_game)
+      Game.find_or_create_by!(region: raw_game[:region], game_code: raw_game[:game_code])
+          .update_attributes!(raw_game)
     end
   end
 
@@ -17,7 +18,8 @@ namespace :eshop do
         print "    #{ISO3166::Country[country]}"
         Eshop::Prices.list(country: country, ids: ids).map do |price|
           price[:game] = Game.find_by(region: region, nsuid: price[:nsuid])
-          Price.find_or_initialize_by(nsuid: price[:nsuid], country: country).update_attributes!(price)
+          Price.find_or_initialize_by(nsuid: price[:nsuid], country: country)
+               .update_attributes!(price)
         end
         print "  OK\n"
       end
@@ -25,6 +27,5 @@ namespace :eshop do
   end
 
   desc 'Get all prices from eShop API'
-  task retrieve_all: [:retrieve_games, :retrieve_prices] do
-  end
+  task retrieve_all: %i[retrieve_games retrieve_prices]
 end

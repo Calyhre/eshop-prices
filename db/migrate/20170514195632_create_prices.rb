@@ -11,6 +11,6 @@ class CreatePrices < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_index :prices, [:nsuid, :country], unique: true
+    add_index :prices, %i[nsuid country], unique: true
   end
 end
