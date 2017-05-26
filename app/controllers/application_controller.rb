@@ -62,14 +62,4 @@ class ApplicationController < ActionController::Base
 
     send_data csv, type: 'text/csv; charset=utf-8; header=present'
   end
-
-  def about
-    csv = CSV.generate(headers: true) do |rows|
-      rows << ['Page url', 'http://eshop.calyh.re']
-      rows << ['Author', 'https://reddit.com/u/Calyhre']
-      rows << ['Code', 'https://github.com/Calyhre/eshop-prices']
-    end
-
-    send_data csv, type: 'text/csv; charset=utf-8; header=present'
-  end
 end
