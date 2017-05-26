@@ -29,7 +29,7 @@ namespace :eshop do
 
   desc 'Detect new shops that were not selling games before'
   task detect_new_shops: :environment do
-    ids = Game.distinct.pluck(:nsuid).compact.sample(50)
+    ids = Game.distinct.pluck(:nsuid).compact
     new_shops = []
     puts "Retrieving #{ids.count} prices..."
     countries = Eshop::REGIONS.values.flatten.uniq.sort - Eshop::COUNTRIES

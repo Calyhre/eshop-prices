@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
         lowest = games.flat_map(&:prices).min_by { |price| price.value.exchange_to('USD') }
         next if lowest.blank?
         rates = currencies.map { |c| lowest.value.exchange_to(c).format }
-        rows << [game.first.title, ISO3166::Country[lowest.country].translation('en')].concat(rates)
+        rows << [games.first.title, ISO3166::Country[lowest.country].translation('en')].concat(rates)
       end
     end
 
@@ -39,6 +39,24 @@ class ApplicationController < ActionController::Base
       currencies.each do |code|
         currency = ISO3166::Country.find_country_by_currency(code).currency
         rows << [code, currency.name]
+      end
+    end
+
+    send_data csv, type: 'text/csv; charset=utf-8; header=present'
+  end
+
+  def rates
+    currencies = Price.distinct.pluck(:currency).sort
+
+    csv = CSV.generate(headers: true) do |rows|
+      rows << [''].concat(currencies)
+
+      currencies.each do |from|
+        row = [from]
+        currencies.each do |to|
+          row << Money.default_bank.get_rate(from, to)
+        end
+        rows << row
       end
     end
 
