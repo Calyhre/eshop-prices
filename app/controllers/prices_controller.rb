@@ -22,8 +22,8 @@ class PricesController < ApplicationController
         prices = games.flat_map(&:prices)
         csv << [games.first.title] + @countries.map do |country|
           price = prices.detect { |p| p.country == country }
-          next 'NA' unless price
-          @currency ? price.value.exchange_to(@currency) : price.value
+          next 'N/A' unless price
+          @currency ? price.value.exchange_to(@currency) : price.value.format
         end
       end
     end
