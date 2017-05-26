@@ -1,7 +1,7 @@
 class ChangeGameColumnsName < ActiveRecord::Migration[5.1]
   def change
     # Undo previous indexes, we are gonna replace them
-    remove_index :games, column: [:game_code, :nsuid]
+    remove_index :games, column: %i[game_code nsuid]
     remove_index :games, column: :parsed_game_code
 
     # Rename actual columns
@@ -10,6 +10,6 @@ class ChangeGameColumnsName < ActiveRecord::Migration[5.1]
 
     # Rebuild better indexes
     add_index :games, :game_code
-    add_index :games, [:game_code, :region], unique: true
+    add_index :games, %i[game_code region], unique: true
   end
 end

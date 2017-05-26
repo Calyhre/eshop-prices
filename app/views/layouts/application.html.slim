@@ -16,6 +16,9 @@ html
         overflow: hidden;
         text-overflow: ellipsis;
       }
+      .text-muted {
+        opacity: .2;
+      }
 
   body
     nav.navbar.navbar-toggleable-sm.navbar-light.bg-faded.sticky-top style="width: 100%"
@@ -28,8 +31,10 @@ html
       #navbarSupportedContent.navbar-collapse.collapse
         ul.navbar-nav.mr-auto
           li.nav-item class=(@current_page == 'games' ? 'active' : nil)
-            = link_to 'Game list', '#', class: 'nav-link'
-          li.nav-item
-            = link_to 'All prices', '#', class: 'nav-link disabled'
+            = link_to 'Game list', games_url, class: 'nav-link'
+          li.nav-item class=(@current_page == 'prices' ? 'active' : nil)
+            = link_to 'All prices', prices_url, class: 'nav-link'
+
+        = content_for :navbar_right
 
     = yield
