@@ -1,0 +1,39 @@
+- content_for :head_style do
+  css:
+    td {
+      font-size: 0.9rem;
+    }
+
+- content_for :navbar_right do
+  ul.navbar-nav
+    li.nav-item.dropdown
+      = link_to '#', class: 'nav-link dropdown-toggle', id: 'navbarDropdownMenuLink', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } do
+        - if @currency.nil?
+          | Change currency
+        - else
+          = ISO3166::Country.find_country_by_currency(@currency).currency.name
+      .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdownMenuLink"
+        - unless @currency.nil?
+          = link_to 'In original currency', prices_url, class: 'dropdown-item'
+          .dropdown-divider
+        - @currencies.each do |currency|
+          - next if @currency === currency
+          = link_to ISO3166::Country.find_country_by_currency(currency).currency.name, prices_url(currency: currency), class: 'dropdown-item'
+
+.scroll-container
+  table.table.table-hover
+    thead.thead-default
+      tr
+        th.column--frozen Game
+        - @countries.each do |code|
+          - country = ISO3166::Country[code]
+          th.game-country.text-right style="width: 110px" title=country.unofficial_names.first
+            .text-centered
+              span.emoji = country.emoji_flag
+              = country.alpha3
+    tbody.games
+      - @games.each do |region, games|
+        tr.game title=games.first.title
+          td.game-title.column--frozen.text-overflow = games.first.title
+          - prices_by_country(games: games, countries: @countries, currency: @currency) do |price, options|
+            td.text-overflow.text-right style="width: 110px" title=options[:title] class=options[:class] = price

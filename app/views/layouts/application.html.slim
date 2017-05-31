@@ -11,6 +11,21 @@ html
     script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"
 
     css:
+      html, body {
+        width: 100%;
+        height: 100%;
+      }
+      table {
+      }
+      .navbar + .scroll-container {
+        height: calc(100% - 62px);
+      }
+      .scroll-container {
+        position: relative;
+        display: block;
+        width: 100%;
+        overflow: scroll;
+      }
       .text-overflow {
         white-space: nowrap;
         overflow: hidden;
@@ -19,6 +34,43 @@ html
       .text-muted {
         opacity: .2;
       }
+      .text-centered {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+      }
+      .emoji {
+        display: block;
+        margin-left: 8px;
+        margin-right: 8px;
+      }
+
+      thead {
+        position: sticky;
+        z-index: 2;
+        top: 0;
+      }
+
+      thead, tbody {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+      }
+
+      .column--frozen {
+        position: sticky;
+        z-index: 1;
+        left: 0;
+        width: 200px;
+        min-width: 200px;
+        max-width: 200px;
+        background-color: #FFF;
+        box-shadow: inset -1px 0 0 0 #eceeef;
+        font-weight: bold;
+      }
+
+    = content_for :head_style
 
   body
     nav.navbar.navbar-toggleable-sm.navbar-light.bg-faded.sticky-top style="width: 100%"
@@ -30,10 +82,10 @@ html
 
       #navbarSupportedContent.navbar-collapse.collapse
         ul.navbar-nav.mr-auto
-          li.nav-item class=(@current_page == 'games' ? 'active' : nil)
-            = link_to 'Game list', games_url, class: 'nav-link'
-          li.nav-item class=(@current_page == 'prices' ? 'active' : nil)
-            = link_to 'All prices', prices_url, class: 'nav-link'
+          li.nav-item class=(current_page?(controller: :prices) ? 'active' : nil)
+            = link_to 'Prices', prices_url, class: 'nav-link'
+          li.nav-item class=(current_page?(controller: :games) ? 'active' : nil)
+            = link_to 'Games', games_url, class: 'nav-link'
 
         = content_for :navbar_right
 

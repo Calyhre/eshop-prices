@@ -1,23 +1,48 @@
-table.table.table-responsive
-  thead.thead-default
-    tr
-      th Cover
-      th Code
-      th Region
-      th style="width:100%;min-width:200px" Title
-      th eShop ID (nsuid)
-      th Release date
-  tbody.games
-    - @games.each do |region, games|
-      - cover = games.map(&:cover_url).compact.first
-      - games.each_with_index do |game, index|
-        tr.game
-          - if index.zero?
-            td.game--cover-url rowspan=games.count
-              = cover ? image_tag("https://assets.calyh.re/resize?url=#{cover}", style: 'max-width:120px;max-height:120px;', class: 'rounded mx-auto d-block', title: 'wat') : nil
-            td.game--code rowspan=games.count = game.game_code
-          td.game--region = game.region
-          td.game--title.text-overflow  style="width:100%;max-width:0" title=games.first.title = game.title
-          td.game--nsuid = game.nsuid || 'NA'
-          td.game--release-date
-            time.text-overflow datetime=game.release_date.iso8601 = game.release_date.strftime("%b #{game.release_date.day.ordinalize}, %Y")
+- content_for :head_style do
+  css:
+    .games {
+      min-width: 800px;
+    }
+    .game-cover {
+      width: 144px;
+    }
+    .game-code {
+      width: 70px;
+    }
+    .game-region {
+      width: 100px;
+    }
+    .game-title {
+      width: 100%;
+    }
+    .game-nsuid {
+      width: 170px;
+    }
+    .game-release-date {
+      width: 140px;
+    }
+
+.scroll-container
+  table.table
+    thead.thead-default
+      tr
+        th.game-cover Cover
+        th.game-code Code
+        th.game-region Region
+        th.game-title Title
+        th.game-nsuid eShop ID (nsuid)
+        th.game-release-date Release date
+    tbody.games
+      - @games.each do |region, games|
+        - cover = games.map(&:cover_url).compact.first
+        - games.each_with_index do |game, index|
+          tr.game
+            - if index.zero?
+              td.game-cover rowspan=games.count
+                = cover ? image_tag("https://assets.calyh.re/resize?url=#{cover}", style: 'max-width:120px;max-height:120px;', class: 'rounded mx-auto d-block', title: 'wat') : nil
+              td.game-code rowspan=games.count = game.game_code
+            td.game-region = game.region
+            td.game-title.text-overflow title=games.first.title = game.title
+            td.game-nsuid.text-overflow title=game.nsuid = game.nsuid || 'NA'
+            td.game-release-date.text-overflow title=game.release_date.iso8601
+              time.text-overflow datetime=game.release_date.iso8601 = game.release_date.strftime("%b #{game.release_date.day.ordinalize}, %Y")
