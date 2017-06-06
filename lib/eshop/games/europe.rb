@@ -10,11 +10,7 @@ module Eshop
         fl: 'product_code_txt,title,date_from,nsuid_txt,image_url_sq_s',
         fq: [
           'type:GAME',
-          "(#{[
-            'system_type:"nintendoswitch_gamecard"',
-            'system_type:"nintendoswitch_downloadsoftware"',
-            'system_type:"nintendoswitch_digitaldistribution"',
-          ].join(' OR ')})",
+          'system_type:nintendoswitch*',
           'product_code_txt:*',
         ].join(' AND '),
         q: '*',
