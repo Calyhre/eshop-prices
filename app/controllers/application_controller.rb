@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def best_deals
-    all_games   = Game.includes(:prices).by_game_code
+    all_games   = Game.includes(:prices).with_game_code.by_game_code
     currencies  = Price.distinct.pluck(:currency).sort
 
     csv = CSV.generate(headers: true) do |rows|

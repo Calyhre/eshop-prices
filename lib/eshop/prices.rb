@@ -12,11 +12,12 @@ module Eshop
 
     def self.list(country: 'US', ids: [], limit: 50)
       prices = ids.in_groups_of(limit).flat_map do |ids_to_fetch|
+        Rails.logger.debug "Retrieving #{ids_to_fetch.count} prices..."
         query = DEFAULT_PARAMS.merge(country: country, ids: ids_to_fetch.join(','))
         response = get(URL, query: query)
         JSON.parse(response.body, symbolize_names: true)[:prices]
       end
-      prices.select! { |p| p.include? :regular_price }
+      prices.select! { |p| p && p.include?(:regular_price) }
       prices.map { |price| coerce(price, country) }
     end
 

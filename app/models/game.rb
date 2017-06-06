@@ -17,6 +17,12 @@ class Game < ApplicationRecord
 
   has_many :prices
 
+  scope :with_nsuid,      -> { where.not(nsuid: nil) }
+  scope :with_game_code,  -> { where.not(game_code: nil) }
+  scope :from_asia,       -> { where(region: 'asia') }
+  scope :from_americas,   -> { where(region: 'americas') }
+  scope :from_europe,     -> { where(region: 'europe') }
+
   scope :order_by_title, -> { order('LOWER(title COLLATE "C")') }
 
   scope :order_by_region, lambda {
