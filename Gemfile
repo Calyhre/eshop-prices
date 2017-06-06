@@ -7,6 +7,7 @@ gem 'pg', '~> 0.18'
 gem 'rails', '~> 5.1.1'
 gem 'redis', '~>3.2'
 
+gem 'administrate', github: 'thoughtbot/administrate'
 gem 'bugsnag'
 gem 'countries'
 gem 'httparty'
