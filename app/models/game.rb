@@ -11,8 +11,8 @@ class Game < ApplicationRecord
   attribute :release_date,  :datetime
   attribute :cover_url,     :string
 
-  validates :game_code,   format: { with: GAME_CODE_FORMAT }
   validates :region,      inclusion: { in: REGIONS }
+  validates :game_code,   format: { with: GAME_CODE_FORMAT }, allow_nil: true
   validates :nsuid,       format: { with: NSUID_CODE_FORMAT }, allow_nil: true
 
   has_many :prices
